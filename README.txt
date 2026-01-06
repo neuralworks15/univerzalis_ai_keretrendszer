@@ -14,11 +14,11 @@
 ║ nem helyetted gondolkodik, hanem veled együtt dolgozik. A ChatGPT lehet „türelmes magántanár”: ║
 ║ elmagyarázza ugyanazt többféle nehézségi szinten, hoz példákat, generál gyakorló kérdéseket,   ║
 ║ és segít lebontani egy ijesztően nagy témát kis, kezelhető részekre, gyorsíthatja a            ║
-║ problémamegoldást, az elemzést és a szövegalkotást.                             				 ║
+║ problémamegoldást, az elemzést és a szövegalkotást.                                            ║
 ║                                                                                                ║
 ║ Az Univerzális AI Keretrendszer azoknak készült, akik nem csak kipróbálni akarják a ChatGPT-t, ║
 ║ hanem tényleg használni: tanuláshoz, felkészüléshez, rendszerezéshez, ötleteléshez,            ║
-║ vagy akár komolyabb projektek megvalósításához. 												 ║
+║ vagy akár komolyabb projektek megvalósításához.                                                ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 ╔═════════════════════════════════════════════════════════════════════════════════════════════╗
