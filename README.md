@@ -35,6 +35,6 @@ Az Univerzális AI Keretrendszer azoknak készült, akik nem csak kipróbálni a
 | 06 Prompt | Az Univerzális AI Keretrendszeren belül használt system promptokat tartalmazza: <br> - System prompt (chatGPT alap system prompt) <br> - System_Prompt, System_Prompt_1500 <br> - Az eredeti system prompt <br> - chatGPT korlátjának megfelelően 1500 karakteres változat <br> - Meta Prompt - Prompt Factory (CRAFT, COSTAR, COSTARPC) <br> - A CRAFT prompt keretrendszer alapján kidolgozott, prompt gyártó meta prompt, amely használatával az egyes Use Case promptok legyárthatók, az adott Use Case-hez tartozó instrukciók alapján. |
 | 07 QR Code | Az Univerzális AI Keretrendszer letöltési információit tartalmazó QR kódok. |
 | 08 Használati példa | Az Univerzális AI Keretrendszer használatának bemutatása példákon keresztül. |
-| READ_ME.txt | Az Univerzális AI Keretrendszer áttekintő leírását, a könyvtár- és fájlstruktúráját tartalmazó  dokumentum, amely strukturáltan tartalmazza az Az Univerzális AI Keretrendszert felépítő könyvtár- és fájlhierarchiát. |
+| README.txt | Az Univerzális AI Keretrendszer áttekintő leírását, a könyvtár- és fájlstruktúráját tartalmazó  dokumentum, amely strukturáltan tartalmazza az Az Univerzális AI Keretrendszert felépítő könyvtár- és fájlhierarchiát. |
 
 
