@@ -21,7 +21,7 @@ Az Univerzális AI Keretrendszer azoknak készült, akik nem csak kipróbálni a
 - Felnőttek (személyes célra)
 
 ## Univerzális AI Keretrendszer számokban
-![Univerzális AI Keretrendszer számokban](Misc/Numbers.png)
+![Univerzális AI Keretrendszer számokban](Misc/UAIK_Numbers.png)
 
 ## Univerzális AI Keretrendszer Könyvtárstruktúra
 
