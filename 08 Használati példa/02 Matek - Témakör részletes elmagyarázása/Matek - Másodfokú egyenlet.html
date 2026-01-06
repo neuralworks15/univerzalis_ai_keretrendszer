@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Másodfokú Egyenlet Részletes Elemzése</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #333;
+            --secondary-color: #005a9c;
+            --background-color: #fff;
+            --header-border-color: #eee;
+            --table-border-color: #ddd;
+            --table-header-bg: #f8f8f8;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--primary-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        header, article {
+            margin-bottom: 25px;
+        }
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            border-bottom: 2px solid var(--header-border-color);
+            padding-bottom: 8px;
+        }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; border-bottom-style: dotted; }
+        h4 { font-size: 1.1em; border-bottom: none; }
+        p, ul, ol {
+            margin-bottom: 1em;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        strong {
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5em;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid var(--table-border-color);
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: var(--table-header-bg);
+            font-weight: 600;
+        }
+        .meta-info {
+            background-color: #f9f9f9;
+            border-left: 5px solid var(--secondary-color);
+            padding: 10px 15px;
+            font-size: 0.9em;
+            margin-bottom: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>A Másodfokú Egyenlet Részletes Elemzése</h1>
+            <div class="meta-info">
+                <p><strong>Dátum:</strong> 2026.01.04.</p>
+                <p><strong>Tantárgy:</strong> Matematika</p>
+                <p><strong>Témakör:</strong> Másodfokú egyenlet</p>
+                <p><strong>Évfolyam:</strong> 9-12 | <strong>Tudás szint:</strong> haladó</p>
+            </div>
+        </header>
+
+        <main>
+            <section id="bevezetes">
+                <h2>1. Bevezetés a témakörhöz, helye a matematikában</h2>
+                <p>A másodfokú egyenlet az algebra egyik legalapvetőbb és leggyakrabban használt eszköze. Míg a lineáris (elsőfokú) egyenletek az egyenes arányosságokat és állandó változásokat írják le, a másodfokú egyenletek egy sokkal gazdagabb világot nyitnak meg, beleértve a görbéket, a maximum- és minimumproblémákat és a gyorsuló mozgásokat.</p>
+                <h4>Helye a matematika rendszerében:</h4>
+                <ul>
+                    <li><strong>Előfeltételek:</strong> A másodfokú egyenletek megértéséhez stabil algebrai alapokra van szükség, beleértve az algebrai kifejezésekkel való műveletvégzést, a zárójelek felbontását, a nevezetes azonosságokat és az elsőfokú egyenletek megoldását.</li>
+                    <li><strong>Főtémakör:</strong> Az <strong>algebra</strong> és a <strong>függvénytan</strong> kulcsfontosságú része.</li>
+                    <li><strong>Kapcsolódó témakörök:</strong> A másodfokú egyenlet megoldása elengedhetetlen a <strong>másodfokú függvények</strong> (parabolák) elemzéséhez (zérushelyek meghatározása), a <strong>másodfokú egyenlőtlenségek</strong> megoldásához, valamint a <strong>koordinátageometriában</strong> (pl. kör és egyenes metszéspontjainak kiszámítása).</li>
+                    <li><strong>Későbbi témákhoz:</strong> A másodfokú egyenletek ismerete alapvető az <strong>egyetemi matematikában</strong>, különösen az analízisben (függvényvizsgálat, szélsőérték-számítás) és a lineáris algebrában.</li>
+                </ul>
+            </section>
+            
+            <section id="alapfogalmak">
+                <h2>2. Alapfogalmak, definíciók (elméleti rész)</h2>
+                <p><strong>Definíció:</strong> A másodfokú egyenlet egy olyan egyenlet, amelynek általános (vagy nullára redukált) alakja:
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2 + bx + c = 0</annotation></semantics></math>
+                ahol <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation>x</annotation></semantics></math> az ismeretlen, <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation>a</annotation></semantics></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation>b</annotation></semantics></math> és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation>c</annotation></semantics></math> pedig valós számok, az úgynevezett együtthatók. A legfontosabb feltétel, hogy <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>≠</mo><mn>0</mn></mrow><annotation>a 
+eq 0</annotation></semantics></math>, mivel ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mn>0</mn></mrow><annotation>a=0</annotation></semantics></math> lenne, az egyenlet elsőfokúvá egyszerűsödne.</p>
+                <h4>Az együtthatók nevei:</h4>
+                <ul>
+                    <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation>a</annotation></semantics></math>: főegyüttható (a másodfokú tag együtthatója)</li>
+                    <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation>b</annotation></semantics></math>: lineáris tag együtthatója</li>
+                    <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation>c</annotation></semantics></math>: konstans tag (vagy szabad tag)</li>
+                </ul>
+                <h4>Teljes és hiányos másodfokú egyenletek:</h4>
+                <ul>
+                    <li><strong>Teljes másodfokú egyenlet:</strong> Ha mindhárom együttható (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>,</mo><mi>b</mi><mo>,</mo><mi>c</mi></mrow><annotation>a, b, c</annotation></semantics></math>) nullától különböző.</li>
+                    <li><strong>Hiányos másodfokú egyenlet:</strong> Ha a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation>b</annotation></semantics></math> vagy a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation>c</annotation></semantics></math> együttható (vagy mindkettő) nulla.
+                        <ul>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation>b=0</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2+c=0</annotation></semantics></math> (tiszta másodfokú egyenlet)</li>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>c=0</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2+bx=0</annotation></semantics></math></li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>Az egyenlet gyökei:</strong> Az egyenlet megoldásai (vagy gyökei) azok az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation>x</annotation></semantics></math> értékek, amelyek az egyenletbe behelyettesítve igaz egyenlőséget adnak. Egy másodfokú egyenletnek a valós számok halmazán lehet kettő, egy vagy nulla megoldása.</p>
+            </section>
+
+            <section id="tetelek">
+                <h2>3. Fontos tulajdonságok, tételek, összefüggések</h2>
+                <h3>A diszkrimináns</h3>
+                <p>A másodfokú egyenlet megoldásainak számát egyetlen érték, a diszkrimináns (jele: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation>D</annotation></semantics></math>) határozza meg. Ez az érték az együtthatókból számolható.</p>
+                <p><strong>Definíció:</strong> A diszkrimináns <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow><annotation>D = b^2 - 4ac</annotation></semantics></math>.</p>
+                <p><strong>Jelentése:</strong></p>
+                <ul>
+                    <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation>D > 0</annotation></semantics></math>, az egyenletnek <strong>két különböző valós gyöke</strong> van.</li>
+                    <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>0</mn></mrow><annotation>D = 0</annotation></semantics></math>, az egyenletnek <strong>egy (vagy két egybeeső) valós gyöke</strong> van. Ezt a gyököt kétszeres vagy dupla gyöknek is nevezik.</li>
+                    <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation>D < 0</annotation></semantics></math>, az egyenletnek <strong>nincs valós gyöke</strong>. (A komplex számok halmazán két konjugált komplex gyöke van, de ez a középiskolai tananyagon túlmutat.)</li>
+                </ul>
+                <h3>A megoldóképlet</h3>
+                <p>A másodfokú egyenlet gyökeit a megoldóképlet segítségével lehet meghatározni, amely közvetlenül az együtthatókat használja.</p>
+                <p><strong>Tétel:</strong> Az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2 + bx + c = 0</annotation></semantics></math> egyenlet valós gyökei (ha léteznek) a következő képlettel számíthatók ki:
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mi>D</mi></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow><annotation>x_{1,2} = rac{-b 
+pm	ext{ath} 	ext{sqrt}{b^2-4ac}}{2a} = rac{-b 
+pm	ext{ath} 	ext{sqrt}{D}}{2a}</annotation></semantics></math></br></p>
+                <h3>Vieta-formulák (gyökök és együtthatók közötti összefüggések)</h3>
+                <p>Ha egy másodfokú egyenletnek léteznek valós gyökei (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation>x_1</annotation></semantics></math> és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation>x_2</annotation></semantics></math>), akkor a gyökök összege és szorzata egyszerű kapcsolatban áll az egyenlet együtthatóival.</p>
+                <p><strong>Tétel:</strong> Az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2 + bx + c = 0</annotation></semantics></math> egyenlet gyökeire, <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation>x_1</annotation></semantics></math>-re és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation>x_2</annotation></semantics></math>-re, fennállnak a következő összefüggések:
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mo>-</mo><mfrac><mi>b</mi><mi>a</mi></mfrac></mrow><annotation>x_1 + x_2 = -b/a</annotation></semantics></math>
+                <br>
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>·</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mfrac><mi>c</mi><mi>a</mi></mfrac></mrow><annotation>x_1 
+pm	ext{ath} 	ext{cdot} x_2 = c/a</annotation></semantics></math></p>
+                <h3>Gyöktényezős alak</h3>
+                <p>Ha egy másodfokú egyenletnek ismerjük a gyökeit (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation>x_1</annotation></semantics></math> és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation>x_2</annotation></semantics></math>), akkor a hozzá tartozó másodfokú polinom felírható szorzat alakban.</p>
+                <p><strong>Tétel:</strong> Az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi></mrow><annotation>ax^2 + bx + c</annotation></semantics></math> polinom gyöktényezős alakja:
+                <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mi>a</mi><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>1</mn></msub><mo>)</mo><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>2</mn></msub><mo>)</mo></mrow><annotation>ax^2 + bx + c = a(x - x_1)(x - x_2)</annotation></semantics></math></p>
+            </section>
+
+            <section id="alkalmazas">
+                <h2>4. A témakör használata a matematikában és a való életben</h2>
+                <h4>Használat a matematikán belül:</h4>
+                <ul>
+                    <li><strong>Függvények analízise:</strong> A másodfokú függvény (parabola) zérushelyeinek, azaz az x-tengellyel való metszéspontjainak meghatározása.</li>
+                    <li><strong>Egyenlőtlenségek:</strong> Másodfokú egyenlőtlenségek megoldása a gyökök és a parabola grafikonjának segítségével.</li>
+                    <li><strong>Geometria:</strong> Két alakzat (pl. kör és egyenes) metszéspontjainak koordinátáinak kiszámítása, ha a kapott egyenletrendszer másodfokú egyenletre vezet.</li>
+                </ul>
+                <h4>Használat a való életben:</h4>
+                <ul>
+                    <li><strong>Fizika:</strong> A legklasszikusabb példa a <strong>hajítások</strong> leírása. Egy eldobott tárgy pályája (légellenállást elhanyagolva) egy parabola, és a mozgását leíró egyenletek gyakran másodfokúak. Például kiszámolható, hogy egy labda mikor ér földet (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>0</mn></mrow><annotation>h(t)=0</annotation></semantics></math>).</li>
+                    <li><strong>Mérnöki tudományok:</strong> Hidak és boltívek tervezésekor (amelyek gyakran parabola alakúak), antennák fókuszpontjának meghatározásakor.</li>
+                    <li><strong>Közgazdaságtan:</strong> Bizonyos piaci modellekben a profit vagy a bevétel függvénye lehet másodfokú, így a maximális profitot egy másodfokú függvény szélsőértékeként lehet megtalálni.</li>
+                </ul>
+            </section>
+
+            <section id="mintafeladat">
+                <h2>5. Konkrét mintafeladat részletes, lépésről lépésre történő megoldással</h2>
+                <article>
+                    <h4>Feladat szövege:</h4>
+                    <p>Oldja meg a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>-</mo><mn>5</mn><mi>x</mi><mo>-</mo><mn>3</mn><mo>=</mo><mn>0</mn></mrow><annotation>2x^2 - 5x - 3 = 0</annotation></semantics></math> egyenletet a valós számok halmazán!</p>
+                    
+                    <h4>1. Adatok összegyűjtése és értelmezése:</h4>
+                    <p>Az egyenlet már a standard <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2 + bx + c = 0</annotation></semantics></math> alakban van, így az együtthatók könnyen leolvashatók:</p>
+                    <ul>
+                        <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mn>2</mn></mrow><annotation>a = 2</annotation></semantics></math> (a főegyüttható)</li>
+                        <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mo>-</mo><mn>5</mn></mrow><annotation>b = -5</annotation></semantics></math> (a lineáris tag együtthatója)</li>
+                        <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mo>-</mo><mn>3</mn></mrow><annotation>c = -3</annotation></semantics></math> (a konstans tag)</li>
+                        <li><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation>x</annotation></semantics></math> az ismeretlen, amit keresünk.</li>
+                    </ul>
+
+                    <h4>2. A megoldás menetének megtervezése:</h4>
+                    <p>Mivel ez egy teljes másodfokú egyenlet, a legcélravezetőbb a megoldóképlet alkalmazása. Először kiszámoljuk a diszkriminánst, hogy lássuk, hány valós megoldásra számíthatunk.</p>
+
+                    <h4>3. A diszkrimináns kiszámítása:</h4>
+                    <p>A diszkrimináns képlete: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow><annotation>D = b^2 - 4ac</annotation></semantics></math>.
+                    Behelyettesítve az értékeket:
+                    <br>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo>(</mo><mo>-</mo><mn>5</mn><msup><mo>)</mo><mn>2</mn></msup><mo>-</mo><mn>4</mn><mo>·</mo><mo>(</mo><mn>2</mn><mo>)</mo><mo>·</mo><mo>(</mo><mo>-</mo><mn>3</mn><mo>)</mo><mo>=</mo><mn>25</mn><mo>-</mo><mo>(</mo><mo>-</mo><mn>24</mn><mo>)</mo><mo>=</mo><mn>25</mn><mo>+</mo><mn>24</mn><mo>=</mo><mn>49</mn></mrow><annotation>D = (-5)^2 - 4 
+pm	ext{ath} 	ext{cdot} (2) 
+pm	ext{ath} 	ext{cdot} (-3) = 25 - (-24) = 25 + 24 = 49</annotation></semantics></math>
+                    Mivel <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>49</mn><mo>&gt;</mo><mn>0</mn></mrow><annotation>D = 49 > 0</annotation></semantics></math>, tudjuk, hogy az egyenletnek két különböző valós gyöke van.</p>
+
+                    <h4>4. A megoldóképlet alkalmazása:</h4>
+                    <p>A megoldóképlet: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mi>D</mi></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow><annotation>x_{1,2} = rac{-b 
+pm	ext{ath} 	ext{sqrt}{D}}{2a}</annotation></semantics></math>.
+                    Behelyettesítjük az együtthatókat és a diszkrimináns értékét:
+                    <br>
+                    <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mfrac><mrow><mo>-</mo><mo>(</mo><mo>-</mo><mn>5</mn><mo>)</mo><mo>±</mo><msqrt><mn>49</mn></msqrt></mrow><mrow><mn>2</mn><mo>·</mo><mn>2</mn></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>5</mn><mo>±</mo><mn>7</mn></mrow><mn>4</mn></mfrac></mrow><annotation>x_{1,2} = rac{-(-5) 
+pm	ext{ath} 	ext{sqrt}{49}}{2 
+pm	ext{ath} 	ext{cdot} 2} = rac{5 
+pm	ext{ath} 7}{4}</annotation></semantics></math>
+                    Most szétválasztjuk a két megoldást a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo></mrow><annotation>
+pm	ext{ath} 	ext{pm}</annotation></semantics></math> jel alapján:
+                    <ul>
+                        <li><strong>Az első gyök kiszámítása:</strong>
+                            <br>
+                            <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mfrac><mrow><mn>5</mn><mo>+</mo><mn>7</mn></mrow><mn>4</mn></mfrac><mo>=</mo><mfrac><mn>12</mn><mn>4</mn></mfrac><mo>=</mo><mn>3</mn></mrow><annotation>x_1 = rac{5 + 7}{4} = rac{12}{4} = 3</annotation></semantics></math>
+                        </li>
+                        <li><strong>A második gyök kiszámítása:</strong>
+                            <br>
+                            <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mfrac><mrow><mn>5</mn><mo>-</mo><mn>7</mn></mrow><mn>4</mn></mfrac><mo>=</mo><mfrac><mrow><mo>-</mo><mn>2</mn></mrow><mn>4</mn></mfrac><mo>=</mo><mo>-</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><annotation>x_2 = rac{5 - 7}{4} = rac{-2}{4} = -1/2</annotation></semantics></math>
+                        </li>
+                    </ul>
+
+                    <h4>5. Ellenőrzés és értelmezés:</h4>
+                    <p>Az egyenlet két valós megoldása <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mn>3</mn></mrow><annotation>x_1 = 3</annotation></semantics></math> és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mo>-</mo><mn>0.5</mn></mrow><annotation>x_2 = -0.5</annotation></semantics></math>.</p>
+                    <ul>
+                        <li><strong>Ellenőrzés behelyettesítéssel:</strong>
+                            <ul>
+                                <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>3</mn></mrow><annotation>x=3</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>(</mo><mn>3</mn><msup><mo>)</mo><mn>2</mn></msup><mo>-</mo><mn>5</mn><mo>(</mo><mn>3</mn><mo>)</mo><mo>-</mo><mn>3</mn><mo>=</mo><mn>2</mn><mo>·</mo><mn>9</mn><mo>-</mo><mn>15</mn><mo>-</mo><mn>3</mn><mo>=</mo><mn>18</mn><mo>-</mo><mn>15</mn><mo>-</mo><mn>3</mn><mo>=</mo><mn>0</mn></mrow><annotation>2(3)^2 - 5(3) - 3 = 2 
+pm	ext{ath} 	ext{cdot} 9 - 15 - 3 = 18 - 15 - 3 = 0</annotation></semantics></math>. Az eredmény helyes.</li>
+                                <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mo>-</mo><mn>0.5</mn></mrow><annotation>x=-0.5</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>(</mo><mo>-</mo><mn>0.5</mn><msup><mo>)</mo><mn>2</mn></msup><mo>-</mo><mn>5</mn><mo>(</mo><mo>-</mo><mn>0.5</mn><mo>)</mo><mo>-</mo><mn>3</mn><mo>=</mo><mn>2</mn><mo>(</mo><mn>0.25</mn><mo>)</mo><mo>+</mo><mn>2.5</mn><mo>-</mo><mn>3</mn><mo>=</mo><mn>0.5</mn><mo>+</mo><mn>2.5</mn><mo>-</mo><mn>3</mn><mo>=</mo><mn>0</mn></mrow><annotation>2(-0.5)^2 - 5(-0.5) - 3 = 2(0.25) + 2.5 - 3 = 0.5 + 2.5 - 3 = 0</annotation></semantics></math>. Az eredmény helyes.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Ellenőrzés Vieta-formulákkal:</strong>
+                            <ul>
+                                <li>Gyökök összege: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn><mo>+</mo><mo>(</mo><mo>-</mo><mn>0.5</mn><mo>)</mo><mo>=</mo><mn>2.5</mn></mrow><annotation>x_1 + x_2 = 3 + (-0.5) = 2.5</annotation></semantics></math>. A képlet szerint: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>-</mo><mfrac><mi>b</mi><mi>a</mi></mfrac><mo>=</mo><mo>-</mo><mfrac><mrow><mo>-</mo><mn>5</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>2.5</mn></mrow><annotation>-b/a = -(-5)/2 = 2.5</annotation></semantics></math>. Az eredmény egyezik.</li>
+                                <li>Gyökök szorzata: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>·</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn><mo>·</mo><mo>(</mo><mo>-</mo><mn>0.5</mn><mo>)</mo><mo>=</mo><mo>-</mo><mn>1.5</mn></mrow><annotation>x_1 
+pm	ext{ath} 	ext{cdot} x_2 = 3 
+pm	ext{ath} 	ext{cdot} (-0.5) = -1.5</annotation></semantics></math>. A képlet szerint: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>c</mi><mi>a</mi></mfrac><mo>=</mo><mfrac><mrow><mo>-</mo><mn>3</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mo>-</mo><mn>1.5</mn></mrow><annotation>c/a = -3/2 = -1.5</annotation></semantics></math>. Az eredmény egyezik.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Eredmény:</strong> A <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>-</mo><mn>5</mn><mi>x</mi><mo>-</mo><mn>3</mn><mo>=</mo><mn>0</mn></mrow><annotation>2x^2 - 5x - 3 = 0</annotation></semantics></math> egyenlet megoldáshalmaza: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mo>{</mo><mn>3</mn><mo>;</mo><mo>-</mo><mn>0.5</mn><mo>}</mo></mrow><annotation>M = {3; -0.5}</annotation></semantics></math>.</p>
+                </article>
+            </section>
+            
+            <section id="kepletek">
+                <h2>6. Képletek és összefüggések táblázata</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sorszám</th>
+                            <th>Képlet</th>
+                            <th>Képlet magyarázata</th>
+                            <th>Használata</th>
+                            <th>Jótanácsok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow><annotation>D = b^2 - 4ac</annotation></semantics></math></td>
+                            <td>A <strong>diszkrimináns</strong>, amely az együtthatókból számolható.</td>
+                            <td>A valós gyökök számának meghatározására, a megoldóképlet részeként.</td>
+                            <td>Először mindig ezt érdemes kiszámolni. Figyelj a negatív előjelekre, különösen a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow><annotation>-4ac</annotation></semantics></math> tagban!</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mi>D</mi></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow><annotation>x_{1,2} = rac{-b 
+pm	ext{ath} 	ext{sqrt}{D}}{2a}</annotation></semantics></math></td>
+                            <td>A <strong>megoldóképlet</strong>, amely megadja az egyenlet gyökeit.</td>
+                            <td>Teljes másodfokú egyenletek megoldására.</td>
+                            <td>A képletet pontosan kell tudni. A <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>-</mo><mi>b</mi></mrow><annotation>-b</annotation></semantics></math> azt jelenti, hogy a <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation>b</annotation></semantics></math> együttható ellentettjét kell venni.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mo>-</mo><mfrac><mi>b</mi><mi>a</mi></mfrac></mrow><annotation>x_1 + x_2 = -b/a</annotation></semantics></math></td>
+                            <td><strong>Vieta-formula</strong> a gyökök összegére.</td>
+                            <td>A gyökök ellenőrzésére, vagy ha a gyökök összege a kérdés, de maguk a gyökök nem.</td>
+                            <td>Figyelj a negatív előjelre!</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>·</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mfrac><mi>c</mi><mi>a</mi></mfrac></mrow><annotation>x_1 
+pm	ext{ath} 	ext{cdot} x_2 = c/a</annotation></semantics></math></td>
+                            <td><strong>Vieta-formula</strong> a gyökök szorzatára.</td>
+                            <td>A gyökök ellenőrzésére, vagy ha a gyökök szorzata a kérdés.</td>
+                            <td>Itt nincs negatív előjel.</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>1</mn></msub><mo>)</mo><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>2</mn></msub><mo>)</mo></mrow><annotation>a(x - x_1)(x - x_2)</annotation></semantics></math></td>
+                            <td>A másodfokú polinom <strong>gyöktényezős alakja</strong>.</td>
+                            <td>Másodfokú egyenlőtlenségek megoldásához, a függvény grafikonjának vázolásához.</td>
+                            <td>Csak akkor létezik valós alak, ha vannak valós gyökök. Ne felejtsd el az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation>a</annotation></semantics></math> főegyütthatót a szorzat elején!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="vazlat">
+                <h2>8. Rövid, jól strukturált vázlat (gyors ismétléshez)</h2>
+                <h3>I. Elméleti Alapok</h3>
+                <ol>
+                    <li><strong>Definíció:</strong>
+                        <ul>
+                            <li>Általános alak: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>ax^2 + bx + c = 0</annotation></semantics></math>, ahol <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>≠</mo><mn>0</mn></mrow><annotation>a 
+eq 0</annotation></semantics></math>.</li>
+                            <li>Együtthatók: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation>a</annotation></semantics></math> (főegyüttható), <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation>b</annotation></semantics></math> (lineáris tag), <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation>c</annotation></semantics></math> (konstans).</li>
+                        </ul>
+                    </li>
+                    <li><strong>A gyökök száma és a diszkrimináns (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow><annotation>D = b^2 - 4ac</annotation></semantics></math>):</strong>
+                        <ul>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation>D > 0</annotation></semantics></math>: 2 különböző valós gyök.</li>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>0</mn></mrow><annotation>D = 0</annotation></semantics></math>: 1 (kétszeres) valós gyök.</li>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation>D < 0</annotation></semantics></math>: Nincs valós gyök.</li>
+                        </ul>
+                    </li>
+                    <li><strong>A megoldóképlet:</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mi>D</mi></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow><annotation>x_{1,2} = rac{-b 
+pm	ext{ath} 	ext{sqrt}{D}}{2a}</annotation></semantics></math></li>
+                    <li><strong>Vieta-formulák:</strong>
+                        <ul>
+                            <li>Összeg: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mo>-</mo><mi>b</mi><mo>/</mo><mi>a</mi></mrow><annotation>x_1 + x_2 = -b/a</annotation></semantics></math></li>
+                            <li>Szorzat: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>·</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mi>c</mi><mo>/</mo><mi>a</mi></mrow><annotation>x_1 
+pm	ext{ath} 	ext{cdot} x_2 = c/a</annotation></semantics></math></li>
+                        </ul>
+                    </li>
+                    <li><strong>Gyöktényezős alak:</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>1</mn></msub><mo>)</mo><mo>(</mo><mi>x</mi><mo>-</mo><msub><mi>x</mi><mn>2</mn></msub><mo>)</mo></mrow><annotation>a(x-x_1)(x-x_2)</annotation></semantics></math></li>
+                </ol>
+                <h3>II. Gyakorlati Elemek</h3>
+                <ol>
+                    <li><strong>Megoldás menete (teljes egyenlet):</strong>
+                        <ol>
+                            <li>Nullára rendezés (ha szükséges).</li>
+                            <li>Az <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>,</mo><mi>b</mi><mo>,</mo><mi>c</mi></mrow><annotation>a, b, c</annotation></semantics></math> együtthatók leolvasása.</li>
+                            <li>A diszkrimináns (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation>D</annotation></semantics></math>) kiszámítása.</li>
+                            <li>A megoldóképlet alkalmazása.</li>
+                            <li>Ellenőrzés.</li>
+                        </ol>
+                    </li>
+                    <li><strong>Megoldás menete (hiányos egyenletek):</strong>
+                        <ul>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mn>0</mn></mrow><annotation>c=0</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>(</mo><mi>a</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo>)</mo><mo>=</mo><mn>0</mn></mrow><annotation>x(ax+b)=0</annotation></semantics></math>, így <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation>x_1=0</annotation></semantics></math> és <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mo>-</mo><mi>b</mi><mo>/</mo><mi>a</mi></mrow><annotation>x_2=-b/a</annotation></semantics></math>.</li>
+                            <li>Ha <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation>b=0</annotation></semantics></math>: <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mo>-</mo><mi>c</mi><mo>/</mo><mi>a</mi></mrow><annotation>x^2=-c/a</annotation></semantics></math>, majd gyökvonás.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Gyakori hibák:</strong>
+                        <ul>
+                            <li>Az együtthatók előjelének eltévesztése.</li>
+                            <li>A megoldóképlet pontatlan ismerete.</li>
+                            <li>Negatív szám behelyettesítésekor a zárójel elhagyása.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

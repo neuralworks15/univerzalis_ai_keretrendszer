@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Számkitaláló játék  | v1.0</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --text:#e7ecff;
+      --muted:#aeb8e6;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(110,168,255,.25), transparent 60%),
+                  radial-gradient(900px 700px at 90% 10%, rgba(125,255,167,.18), transparent 55%),
+                  radial-gradient(800px 700px at 50% 100%, rgba(255,110,138,.10), transparent 60%),
+                  #0b1020;
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .app{
+      width:min(900px, 100%);
+      background: linear-gradient(180deg, rgba(18,26,51,.9), rgba(15,23,48,.92));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+
+    header{
+      padding:18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    header .title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    header h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    header .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    header .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+
+    /* ✅ Fix/korlátozott magasság → log nem növeli a layoutot */
+    main{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:0;
+      height: min(85vh, 720px);
+    }
+
+    /* ✅ kritikus overflow/scroll működéshez grid/flex-ben */
+    .logWrap, .side{ min-height: 0; }
+
+    .logWrap{
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      height:100%;
+    }
+
+    /* ✅ csak ez scrolloz */
+    .log{
+      flex:1;
+      min-height:0;
+      overflow-y:auto;
+      overflow-x:hidden;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding:14px;
+      line-height:1.45;
+      scroll-behavior:smooth;
+    }
+
+    .line{
+      padding:8px 10px;
+      border-radius:12px;
+      margin:6px 0;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      word-break: break-word;
+    }
+    .line.system{ background: rgba(110,168,255,.08); border-color: rgba(110,168,255,.14); }
+    .line.user{ background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); }
+    .line.warn{ background: rgba(255,110,138,.10); border-color: rgba(255,110,138,.18); }
+    .line.ok{ background: rgba(125,255,167,.10); border-color: rgba(125,255,167,.18); }
+
+    .inputRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex: 0 0 auto;
+    }
+
+    input[type="text"]{
+      flex:1;
+      padding:12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      font-size:14px;
+    }
+    input[type="text"]::placeholder{ color: rgba(231,236,255,.45); }
+
+    button{
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(110,168,255,.16);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    button:hover{ background: rgba(110,168,255,.22); }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .side{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      height:100%;
+      overflow:auto;
+    }
+
+    .card{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding:14px;
+      flex: 0 0 auto;
+    }
+    .card h2{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color: var(--muted);
+      font-weight:700;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:8px;
+      font-size:14px;
+    }
+    .kv .row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .kv .k{ color: var(--muted); }
+    .kv .v{ font-variant-numeric: tabular-nums; }
+
+    .hint{
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.4;
+      margin:0;
+    }
+
+    .quickBtns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:8px;
+    }
+    .quickBtns button{ background: rgba(255,255,255,.06); }
+    .quickBtns button:hover{ background: rgba(255,255,255,.10); }
+
+    @media (max-width: 860px){
+      main{
+        grid-template-columns: 1fr;
+        height: min(78vh, 680px);
+      }
+      .logWrap{
+        border-right:none;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+    }
+  
+	/* --- Kék scrollbar (Chromium/Edge/Safari + Firefox) --- */
+	:root{
+	  --accent-blue: rgb(110,168,255);
+	}
+
+	/* Firefox */
+	*{
+	  scrollbar-width: thin;
+	  scrollbar-color: var(--accent-blue) rgba(255,255,255,.08);
+	}
+
+	/* Chromium / Edge / Safari */
+	*::-webkit-scrollbar{
+	  width: 12px;
+	  height: 12px;
+	}
+
+	*::-webkit-scrollbar-track{
+	  background: rgba(255,255,255,.08);
+	  border-radius: 999px;
+	}
+
+	*::-webkit-scrollbar-thumb{
+	  background: var(--accent-blue);
+	  border-radius: 999px;
+	  border: 3px solid rgba(255,255,255,.08);
+	}
+
+	*::-webkit-scrollbar-thumb:hover{
+	  background: rgba(110,168,255,.85);
+	}
+  
+    /* UI-only: elrejtett sor (a JS-nek marad az elem) */
+    .srHidden{ display:none !important; }
+
+</style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Számkitaláló játék">
+    <header>
+      <div class="title">
+        <h1>Számkitaláló játék | v1.0</h1>
+        <p class="sub">Bérczes Richárd | SZMPG 9.D | 2025.12.22.</p>
+      </div>
+      <div class="pill" id="statePill">Állapot: játék folyamatban</div>
+    </header>
+
+    <main>
+      <section class="logWrap">
+        <div class="log" id="log" aria-live="polite" aria-label="Játék napló"></div>
+
+        <div class="inputRow">
+          <input id="userInput" type="text" inputmode="text" autocomplete="off"
+                 placeholder="Írd be a tippedet (1–100), vagy: Feladom / Új játék" />
+          <button id="sendBtn">Küldés</button>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="card">
+          <h2>Játék állapot</h2>
+          <div class="kv">
+            <div class="row srHidden">
+            <span class="k">Lépések (step)</span><span class="v" id="stepView">0</span>
+          </div>
+            <div class="row"><span class="k">Tippek száma</span><span class="v" id="tipsCountView">0</span></div>
+            <div class="row"><span class="k">Előző tippek</span><span class="v" id="tipsView">-</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Gyors parancsok</h2>
+          <p class="hint">
+            A játék közben bármikor beírhatod: <b>Feladom</b> vagy <b>Új játék</b>.
+            A játék végén <b>Igen</b> / <b>Nem</b>-mel válaszolj.
+          </p>
+          <div class="quickBtns">
+            <button type="button" id="btnGiveUp">Feladom</button>
+            <button type="button" id="btnNewGame">Új játék</button>
+            <button type="button" id="btnYes">Igen</button>
+            <button type="button" id="btnNo">Nem</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Megjegyzés</h2>
+          <p class="hint">
+            Hibás input nem növeli a lépésszámot. <br>Tippek listája csak érvényes (1–100) számnál bővül.
+          </p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // 0) Játékszabály szöveg KIÍR (bootkor + friss játék induláskor)
+    const RULES = [
+      'Játékszabály:',
+      'Szia! 👋 Én vagyok a Számkitaláló játék.',
+      'Gondoltam egy számra 1 és 100 között, amelyet neked kell kitalálnod.',
+      'Neked be kell írnod a tippedet, én pedig válaszolni fogok, hogy az általam kiválasztott számnál nagyobb vagy kisebb a megadott tipped.',
+      'A játék véget ér, ha kitalálod a számot amire gondoltam vagy beírod a következő szót: "Feladom".',
+      'A játék végén kiírom, hogy hány tippelésből találtad ki a számot.',
+      'Ha kitalálod a számot, együtt ünneplünk 🎉, és akár újra is játszhatunk.',
+      'Új játék indításához írd be: "Új játék". Az "Új játék" utasítást a játék közben is használhatod.'
+    ];
+
+    // DOM
+    const logEl = document.getElementById('log');
+    const inputEl = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    const stepView = document.getElementById('stepView');
+    const tipsCountView = document.getElementById('tipsCountView');
+    const tipsView = document.getElementById('tipsView');
+    const statePill = document.getElementById('statePill');
+
+    const btnGiveUp = document.getElementById('btnGiveUp');
+    const btnNewGame = document.getElementById('btnNewGame');
+    const btnYes = document.getElementById('btnYes');
+    const btnNo = document.getElementById('btnNo');
+
+    // Spec szerinti változók
+    let number = 0;
+    let step = 0;
+    let tippek = [];
+    let tipp = 0;
+    let user_text = "";
+
+    // plusz állapot a 16–20 lépéshez
+    let phase = "playing"; // playing | ask_new | stopped
+
+    function randInt(min, max){
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function clearLog(){
+      logEl.innerHTML = "";
+      logEl.scrollTop = 0;
+    }
+
+    function line(text, kind="system"){
+      const div = document.createElement('div');
+      div.className = `line ${kind}`;
+      div.textContent = text;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function setQuickButtonsState(){
+      const stopped = (phase === "stopped");
+      btnGiveUp.disabled = stopped;
+      btnYes.disabled = stopped;
+      btnNo.disabled = stopped;
+      btnNewGame.disabled = false; // mindig aktív
+    }
+
+    function updateSide(){
+      stepView.textContent = String(step);
+      tipsCountView.textContent = String(tippek.length);
+      tipsView.textContent = tippek.length ? tippek.join(', ') : '-';
+
+      if (phase === "playing") statePill.textContent = "Állapot: játék folyamatban";
+      if (phase === "ask_new") statePill.textContent = "Állapot: új játék kérdés";
+      if (phase === "stopped") statePill.textContent = "Állapot: befejezve";
+
+      setQuickButtonsState();
+    }
+
+    // 1–3 pontok: új szám + nullázás
+    function initGame(){
+      number = randInt(1, 100);
+
+      step = 0;
+      tippek = [];
+      tipp = 0;
+      user_text = "";
+
+      phase = "playing";
+      updateSide();
+    }
+
+    // ÚJ: teljes friss játék (log törlés + szabályok + init)
+    function startFreshGame(){
+      clearLog();
+      RULES.forEach(r => line(r, 'system'));
+
+      initGame();
+      line('Gondoltam egy számra 1 és 100 között. Kezdődhet! 🙂', 'system');
+
+      // stopped után is visszakapcsoljuk az inputot
+      sendBtn.disabled = false;
+      inputEl.disabled = false;
+      inputEl.value = "";
+      inputEl.placeholder = 'Írd be a tippedet (1–100), vagy: Feladom / Új játék';
+      inputEl.focus();
+
+      updateSide();
+    }
+
+    function askNewGame(){
+      phase = "ask_new";
+      updateSide();
+      line('Játszunk egy új játékot? (Igen, Nem)', 'system');
+      inputEl.placeholder = 'Válaszolj: Igen / Nem';
+      inputEl.focus();
+    }
+
+    // 7) feladom ág
+    function giveUp(){
+      const tipsStr = tippek.length ? tippek.join(', ') : '-';
+      line(`Köszönöm a játékot. Előző tipp(ek): ${tipsStr}. Tippek száma: ${step}`, 'system');
+      askNewGame();
+    }
+
+    // 15) nyerés
+    function win(){
+      line(`Gratulálok kitaláltad az általam gondolt számot: ${number} | ${step} lépésben`, 'ok');
+      askNewGame();
+    }
+
+    // 19) nem ág → megáll
+    function stopGame(){
+      phase = "stopped";
+      updateSide();
+      line('Köszönöm a játékot, szólj, ha újból szeretnél játszani!', 'system');
+
+      // input letilt, de az "Új játék" gomb marad
+      sendBtn.disabled = true;
+      inputEl.disabled = true;
+      inputEl.value = "";
+      inputEl.placeholder = "A játék véget ért. Új játék indításához nyomd meg az „Új játék” gombot.";
+    }
+
+    // 5–14: while (tipp != number) eseményvezérelt feldolgozás
+    function handlePlayingInput(text){
+      user_text = String(text);
+      const norm = user_text.trim().toLowerCase();
+
+      if (norm === "feladom"){
+        giveUp();
+        return;
+      }
+
+      if (norm === "új játék" || norm === "uj játék"){
+        startFreshGame();
+        return;
+      }
+
+      const parsed = Number(user_text);
+
+      // 6.4: ha nem sikerül egész számmá alakítani
+      if (!Number.isInteger(parsed)){
+        line('Hibás tippet adtál meg. A tippednek 1 és 100 közötti egész számnak kell lennie', 'warn');
+        line('A megadott utasítást nem tudom értelmezni (elfogadott utasítások: Feladom, Új játék)', 'warn');
+        return;
+      }
+
+      // 6.5
+      tipp = parsed;
+
+      // 6.6: tartomány ellenőrzés
+      if (tipp < 1 || tipp > 100){
+        line('Hibás tippet adtál meg. A tippednek 1 és 100 közötti egész számnak kell lennie', 'warn');
+        return;
+      }
+
+      // 9: tipp tárolása
+      tippek.push(tipp);
+      step = step + 1;
+      updateSide();
+
+      // 10–11: visszajelzés
+      if (number > tipp){
+        line('Nagyobbra gondoltam', 'varn');
+      } else if (number < tipp){
+        line('Kisebbre gondoltam', 'varn');
+      }
+
+      // 12–13: előzmények + lépésszám
+      line(`Előző tipp(ek): ${tippek.join(', ')}`, 'system');
+      if (step !== 0){
+        line(`Tippek száma: ${step}`, 'system');
+      }
+
+      // 15: ha eltalálta
+      if (tipp === number){
+        win();
+      }
+    }
+
+    // 17–20: új játék kérdés kezelése
+    function handleAskNewInput(text){
+      const valasz = String(text).trim().toLowerCase();
+
+      if (valasz === "igen" || valasz === "i"){
+        startFreshGame();
+        return;
+      }
+
+      if (valasz === "nem" || valasz === "n"){
+        stopGame();
+        return;
+      }
+
+      line('Kérlek válaszolj így: "Igen" vagy "Nem".', 'warn');
+      line('Játszunk egy új játékot? (Igen, Nem)', 'system');
+    }
+
+    function submit(){
+      if (phase === "stopped") return;
+
+      const trimmed = String(inputEl.value ?? "").trim();
+      if (trimmed.length === 0) return;
+
+      line(trimmed, 'user');
+      inputEl.value = "";
+
+      if (phase === "playing"){
+        handlePlayingInput(trimmed);
+      } else if (phase === "ask_new"){
+        handleAskNewInput(trimmed);
+      }
+
+      updateSide();
+      inputEl.focus();
+    }
+
+    // Események
+    sendBtn.addEventListener('click', submit);
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === "Enter") submit();
+    });
+
+    btnGiveUp.addEventListener('click', () => {
+      if (phase === "stopped") return;
+      inputEl.value = "Feladom";
+      submit();
+    });
+
+    // ✅ stopped állapotban is működik
+    btnNewGame.addEventListener('click', () => {
+      startFreshGame();
+    });
+
+    btnYes.addEventListener('click', () => {
+      if (phase === "stopped") return;
+      inputEl.value = "Igen";
+      submit();
+    });
+
+    btnNo.addEventListener('click', () => {
+      if (phase === "stopped") return;
+      inputEl.value = "Nem";
+      submit();
+    });
+
+    // Boot: szabályok + automatikus indulás megerősítés nélkül
+    (function boot(){
+      RULES.forEach(r => line(r, 'system'));
+      initGame();
+      line('Gondoltam egy számra 1 és 100 között. Kezdődhet! 🙂', 'system');
+      updateSide();
+      inputEl.focus();
+    })();
+  </script>
+</body>
+</html>

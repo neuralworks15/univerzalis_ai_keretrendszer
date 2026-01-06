@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>USE CASE INPUT BUILDER | v1.0</title>
+  <style>
+:root{
+  /* Mossy Hollow (Figma) */
+  --mh-700:#636B2F;
+  --mh-300:#BAC095;
+  --mh-200:#D4DE95;
+  --mh-900:#3D4127;
+
+  /* App tokens */
+  --bg:#0b0d07;
+  --text:#F4F6EE;
+  --muted: var(--mh-300);
+  --shadow: 0 14px 34px rgba(0,0,0,.45);
+  --radius: 16px;
+
+  --accent: var(--mh-200);
+  --accent-strong: var(--mh-700);
+  --surface: rgba(61,65,39,.32);   /* derived from mh-900 */
+  --surface-2: rgba(61,65,39,.22);
+  --border-soft: rgba(212,222,149,.18);
+}
+
+*{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(212,222,149,.14), transparent 60%),
+                  radial-gradient(900px 700px at 90% 10%, rgba(99,107,47,.18), transparent 55%),
+                  radial-gradient(800px 700px at 50% 100%, rgba(255,110,138,.10), transparent 60%),
+                  #0b1020;
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+    }
+
+     .app{
+      width:min(1600px, 100%);
+      background: linear-gradient(180deg, rgba(61,65,39,.72), rgba(61,65,39,.92));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+
+      /* biztosítsunk felső/alsó margót: a kártya ne érjen a viewport széléhez */
+      max-height: calc(100vh - 28px);
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      padding:18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    header .title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    header h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    header .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    header .pill{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+
+    /* Fix/korlátozott magasság → bal oldali preview nem növeli a layoutot */
+    main{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:0;
+
+      /* a kártya belsejében töltse ki a maradék helyet, ne a viewport-hoz mérje magát */
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    /* kritikus overflow/scroll működéshez grid/flex-ben */
+    .logWrap, .side{ min-height: 0; }
+
+    .logWrap{
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      height:100%;
+    }
+
+    /* csak ez scrolloz */
+    .log{
+      flex:1;
+      min-height:0;
+      overflow-y:auto;
+      overflow-x: hidden;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding:14px;
+      line-height:1.45;
+      scroll-behavior:smooth;
+    }
+
+    .mono{
+      margin:0;
+      white-space: pre-wrap;
+      font-size:12.5px;
+      line-height:1.5;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: rgba(244,246,238,.92);
+    
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;}
+
+    .line{
+      padding:8px 10px;
+      border-radius:12px;
+      margin:6px 0;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      word-break: break-word;
+    }
+    .line.system{ background: rgba(99,107,47,.12); border-color: rgba(212,222,149,.22); }
+    .line.warn{ background: rgba(255,110,138,.10); border-color: rgba(255,110,138,.18); }
+    .line.ok{ background: rgba(99,107,47,.10); border-color: rgba(99,107,47,.18); }
+
+    .inputRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex: 0 0 auto;
+      flex-wrap:wrap;
+    }
+
+    input[type="text"], textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      font-size:14px;
+    }
+    input[type="text"]::placeholder, textarea::placeholder{ color: rgba(186,192,149,.65); }
+
+    textarea{
+      min-height: 88px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    button{
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(212,222,149,.22);
+      background: rgba(99,107,47,.24);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    button:hover{ background: rgba(186,192,149,.20); }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .side{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      height:100%;
+      overflow:auto;
+    }
+
+    .card{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding:14px;
+      flex: 0 0 auto;
+    }
+    .card h2{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color: var(--muted);
+      font-weight:700;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:8px;
+      font-size:14px;
+    }
+    .kv .row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      align-items:center;
+    }
+    .kv .k{ color: var(--muted); }
+    .kv .v{ font-variant-numeric: tabular-nums; }
+
+    .hint{
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.4;
+      margin:0;
+    }
+
+    .quickBtns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:8px;
+    }
+    .quickBtns button{ background: rgba(255,255,255,.06); }
+    .quickBtns button:hover{ background: rgba(255,255,255,.10); }
+
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .field label{
+      color: var(--muted);
+      font-size:12px;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+
+    .inline{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .inline > *{ flex:1 1 140px; }
+
+    .srHidden{ display:none !important; }
+
+    @media (max-width: 860px){
+      main{
+        grid-template-columns: 1fr;
+        height: min(78vh, 680px);
+      }
+      .logWrap{
+        border-right:none;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+    }
+	
+	select { color: var(--text); }
+	select option { color: rgba(186,192,149,.95); }                 /* nem aktív elemek */
+	select option:checked { color: var(--accent); } /* aktív elem (Mossy Hollow) */
+	
+	
+	/* --- Kék scrollbar (Chromium/Edge/Safari + Firefox) --- */
+	:root{
+	  --accent-blue: rgb(212,222,149); /* Mossy Hollow accent */
+	}
+
+	/* Firefox */
+	*{
+	  scrollbar-width: thin;
+	  scrollbar-color: var(--accent-blue) rgba(255,255,255,.08);
+	}
+
+	/* Chromium / Edge / Safari */
+	*::-webkit-scrollbar{
+	  width: 12px;
+	  height: 12px;
+	}
+
+	*::-webkit-scrollbar-track{
+	  background: rgba(255,255,255,.08);
+	  border-radius: 999px;
+	}
+
+	*::-webkit-scrollbar-thumb{
+	  background: var(--accent-blue);
+	  border-radius: 999px;
+	  border: 3px solid rgba(255,255,255,.08);
+	}
+
+	*::-webkit-scrollbar-thumb:hover{
+	  background: rgba(212,222,149,.85);
+	}
+	
+	
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Use Case input builder">
+    <header>
+      <div class="title">
+        <h1>USE CASE INPUT BUILDER | v1.0</h1>
+        <p class="sub">Bérczes Richárd | SZMPG 9.D | 2025.12.30.</p>
+      </div>
+      <div class="pill" id="statePill">Use Case-ek: 0 • Mentve: -</div>
+    </header>
+
+    <main>
+      <section class="logWrap">
+        <div class="log" id="log" aria-live="polite" aria-label="Generált XML előnézet">
+          <div class="line system" id="msgLine">Töltsd ki a mezőket a jobb oldalon. Az XML előnézet automatikusan frissül.</div>
+          <pre class="mono" id="xmlPreview"></pre>
+        </div>
+
+        <div class="inputRow">
+          <button type="button" id="btnCopy">XML Másolása</button>
+          <button type="button" id="btnDownload">XML Export</button>
+          <button type="button" id="btnImport">XML Import</button>
+          <button type="button" id="btnSave">Mentés Böngészőbe</button>
+          <button type="button" id="btnLoad">Betöltés Böngészőből</button>
+          <input type="file" id="fileImport" class="srHidden" accept=".xml,.txt" />
+          <p class="hint">Tipp: Az "XML Másolása" a vágólapra, a “Mentés Böngészőbe” a localStorage-ba, az “XML Export” fájlba ment.</p>
+        </div>
+      </section>
+
+      <aside class="side">
+
+        <div class="card">
+          <h2>Gyors tippek</h2>
+          <p class="hint">
+            • Több Use Case-t is felvehetsz (Új / Duplikálás).<br>
+            • A bal oldali XML-t “XML másolása”-val vágólapra teheted, vagy letöltheted fájlként.<br>
+            • Az import a &lt;use_cases&gt; → &lt;use_case&gt; tageket keresi, és mezőnként beolvassa a szöveget.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Use Case</h2>
+          <div class="kv">
+            <div class="row">
+              <span class="k">Aktív</span>
+              <span class="v" style="flex:1; max-width: 65%;">
+                <select id="ucSelect" aria-label="Use case kiválasztása"></select>
+              </span>
+            </div>
+            <div class="row">
+              <span class="k">Műveletek</span>
+              <span class="v" style="flex:1; max-width: 65%;">
+                <div class="inline">
+                  <button type="button" id="btnNew">Új</button>
+                  <button type="button" id="btnDuplicate">Duplikálás</button>
+                  <button type="button" id="btnDelete">Törlés</button>
+                </div>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Mezők</h2>
+          <form id="ucForm" class="form" autocomplete="off">
+            <div class="field">
+              <label for="f_name">name</label>
+              <input id="f_name" type="text" placeholder="pl. Matematika - Házi feladat részletes ellenőrzése" />
+            </div>
+
+            <div class="field">
+              <label for="f_description">description</label>
+              <textarea id="f_description" placeholder="Rövid leírás, indítási szabályok, működés, ellenőrzési pontok..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_users">users</label>
+              <textarea id="f_users" placeholder="Kik használják? (pl. diák, tanár, szülő)"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_inputs_examples">inputs_examples</label>
+              <textarea id="f_inputs_examples" placeholder="Tipikus inputok / alapértelmezések / példák..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_outputs_examples">outputs_examples</label>
+              <textarea id="f_outputs_examples" placeholder="Tipikus output, formátum, fejlécek, nyelv..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_success_criteria">success_criteria</label>
+              <textarea id="f_success_criteria" placeholder="Mitől jó az eredmény? (minőség, pontosság, következetesség)"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_constraints_and_risks">constraints_and_risks</label>
+              <textarea id="f_constraints_and_risks" placeholder="Korlátok / kockázatok / compliance..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_tools_and_integrations">tools_and_integrations</label>
+              <textarea id="f_tools_and_integrations" placeholder="Eszközök / integrációk (ha vannak)..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_languages_and_locale">languages_and_locale</label>
+              <input id="f_languages_and_locale" type="text" placeholder="pl. Magyar" />
+            </div>
+
+            <div class="field">
+              <label for="f_style_and_tone_prefs">style_and_tone_prefs</label>
+              <textarea id="f_style_and_tone_prefs" placeholder="Stílus / hangnem preferenciák..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="f_data_handling">data_handling</label>
+              <textarea id="f_data_handling" placeholder="Adatkezelési elvárások (PII, bizalmasság, logolás)..."></textarea>
+            </div>
+          </form>
+        </div>
+
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // ====== Adatmodell ======
+    const STORAGE_KEY = "useCasesBuilderData_v1";
+
+    const FIELD_KEYS = [
+      "name",
+      "description",
+      "users",
+      "inputs_examples",
+      "outputs_examples",
+      "success_criteria",
+      "constraints_and_risks",
+      "tools_and_integrations",
+      "languages_and_locale",
+      "style_and_tone_prefs",
+      "data_handling"
+    ];
+
+    function emptyUseCase(){
+      const o = {};
+      FIELD_KEYS.forEach(k => o[k] = "");
+      return o;
+    }
+
+    let useCases = [];
+    let activeIndex = 0;
+    let dirty = false;
+	let hasSaved = false; // csak akkor lesz true, ha tényleges mentés/export történt
+
+    // ====== DOM ======
+    const statePill = document.getElementById("statePill");
+    const msgLine = document.getElementById("msgLine");
+    const xmlPreview = document.getElementById("xmlPreview");
+    const ucSelect = document.getElementById("ucSelect");
+
+    const btnNew = document.getElementById("btnNew");
+    const btnDuplicate = document.getElementById("btnDuplicate");
+    const btnDelete = document.getElementById("btnDelete");
+
+    const btnCopy = document.getElementById("btnCopy");
+    const btnDownload = document.getElementById("btnDownload");
+    const btnSave = document.getElementById("btnSave");
+    const btnLoad = document.getElementById("btnLoad");
+    const btnImport = document.getElementById("btnImport");
+    const fileImport = document.getElementById("fileImport");
+
+    // mezők
+    const fieldEls = {
+      name: document.getElementById("f_name"),
+      description: document.getElementById("f_description"),
+      users: document.getElementById("f_users"),
+      inputs_examples: document.getElementById("f_inputs_examples"),
+      outputs_examples: document.getElementById("f_outputs_examples"),
+      success_criteria: document.getElementById("f_success_criteria"),
+      constraints_and_risks: document.getElementById("f_constraints_and_risks"),
+      tools_and_integrations: document.getElementById("f_tools_and_integrations"),
+      languages_and_locale: document.getElementById("f_languages_and_locale"),
+      style_and_tone_prefs: document.getElementById("f_style_and_tone_prefs"),
+      data_handling: document.getElementById("f_data_handling"),
+    };
+
+    // ====== Segédek ======
+    function setMsg(text, kind="system"){
+      msgLine.className = "line " + kind;
+      msgLine.textContent = text;
+    }
+
+	function updatePill(savedText){
+	  const n = useCases.length;
+	  // Ha még sosem mentettünk, akkor ne lehessen "igen"
+	  const saved = savedText ?? (hasSaved ? (dirty ? "Nem" : "Igen") : "Nem");
+	  statePill.textContent = `Use Case(ek): ${n} | Mentve: ${saved}`;
+	}
+
+    function xmlEscape(s){
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&apos;");
+    }
+
+    function buildUseCaseXml(uc){
+      // Kimenet: a tagnevek pontosan a séma mezőnevei
+      const lines = [];
+      lines.push("  <use_case>");
+      FIELD_KEYS.forEach(k => {
+        lines.push(`    <${k}>${xmlEscape(uc[k] ?? "")}</${k}>`);
+      });
+      lines.push("  </use_case>");
+      return lines.join("\n");
+    }
+
+    function buildXml(){
+      const parts = [];
+      parts.push("<use_cases>");
+      useCases.forEach(uc => parts.push(buildUseCaseXml(uc)));
+      parts.push("</use_cases>");
+      return parts.join("\n");
+    }
+
+    function renderPreview(){
+      xmlPreview.textContent = buildXml();
+      updatePill();
+    }
+
+    function refreshSelect(){
+      ucSelect.innerHTML = "";
+      useCases.forEach((uc, idx) => {
+        const opt = document.createElement("option");
+        const title = (uc.name && uc.name.trim().length) ? uc.name.trim() : "Névtelen Use Case";
+        opt.value = String(idx);
+        opt.textContent = `${idx + 1}. ${title}`;
+        ucSelect.appendChild(opt);
+      });
+      ucSelect.value = String(activeIndex);
+    }
+
+    function loadFormFromActive(){
+      const uc = useCases[activeIndex] ?? emptyUseCase();
+      FIELD_KEYS.forEach(k => {
+        if (fieldEls[k]) fieldEls[k].value = uc[k] ?? "";
+      });
+    }
+
+    function markDirty(){
+      dirty = true;
+      updatePill();
+    }
+
+    // ====== CRUD ======
+    function ensureAtLeastOne(){
+      if (!useCases.length){
+        useCases = [ emptyUseCase() ];
+        activeIndex = 0;
+      }
+    }
+
+    function addUseCase(){
+      useCases.push(emptyUseCase());
+      activeIndex = useCases.length - 1;
+      dirty = true;
+      refreshSelect();
+      loadFormFromActive();
+      renderPreview();
+      setMsg("Új Use Case létrehozva.", "ok");
+    }
+
+    function duplicateUseCase(){
+      const src = useCases[activeIndex] ?? emptyUseCase();
+      const copy = JSON.parse(JSON.stringify(src));
+      copy.name = (copy.name && copy.name.trim().length) ? (copy.name + " (másolat)") : "Másolat";
+      useCases.push(copy);
+      activeIndex = useCases.length - 1;
+      dirty = true;
+      refreshSelect();
+      loadFormFromActive();
+      renderPreview();
+      setMsg("Use Case duplikálva.", "ok");
+    }
+
+    function deleteUseCase(){
+      if (useCases.length <= 1){
+        // nem engedjük teljesen üresre törölni
+        useCases[0] = emptyUseCase();
+        activeIndex = 0;
+        dirty = true;
+        refreshSelect();
+        loadFormFromActive();
+        renderPreview();
+        setMsg("Az utolsó Use Case mezői törölve (legalább 1 elemnek maradnia kell).", "warn");
+        return;
+      }
+
+      const title = (useCases[activeIndex]?.name || "Névtelen use case").trim();
+      const ok = confirm(`Biztosan törlöd ezt a Use Case-t?\n\n${title}`);
+      if (!ok) return;
+
+      useCases.splice(activeIndex, 1);
+      activeIndex = Math.max(0, activeIndex - 1);
+      dirty = true;
+      refreshSelect();
+      loadFormFromActive();
+      renderPreview();
+      setMsg("Use Case törölve.", "ok");
+    }
+
+    // ====== Mentés / betöltés ======
+    function saveToBrowser(){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ useCases, activeIndex }));
+        dirty = false;
+		hasSaved = true;
+        updatePill("igen");
+        setMsg("Mentve a böngészőbe (localStorage).", "ok");
+      }catch(e){
+        setMsg("Nem sikerült menteni a böngészőbe (localStorage).", "warn");
+      }
+    }
+
+    function loadFromBrowser(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw){
+          setMsg("Nincs mentett adat a böngészőben.", "warn");
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.useCases)){
+          setMsg("A mentett adat sérült vagy nem kompatibilis.", "warn");
+          return;
+        }
+
+        useCases = parsed.useCases.map(x => {
+          const uc = emptyUseCase();
+          FIELD_KEYS.forEach(k => uc[k] = String(x?.[k] ?? ""));
+          return uc;
+        });
+
+        activeIndex = Math.min(Math.max(0, Number(parsed.activeIndex ?? 0)), useCases.length - 1);
+        ensureAtLeastOne();
+
+        dirty = false;
+        refreshSelect();
+        loadFormFromActive();
+        renderPreview();
+        setMsg("Betöltve a böngészőből.", "ok");
+      }catch(e){
+        setMsg("Nem sikerült betölteni a böngészőből.", "warn");
+      }
+    }
+
+    function downloadXml(){
+      const xml = buildXml();
+      const blob = new Blob([xml], { type: "application/xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+	  a.download = "Use Case Input " + document.getElementById("f_name").value + ".xml";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+	  dirty = false;
+	  hasSaved = true;
+	  updatePill();
+      setMsg("XML letöltés elindítva (" + "Use Case Input " + document.getElementById("f_name").value + ".xml" + ").", "ok");
+    }
+
+    async function copyXml(){
+      const xml = buildXml();
+      try{
+        await navigator.clipboard.writeText(xml);
+        setMsg("XML a vágólapra másolva.", "ok");
+      }catch(e){
+        // fallback
+        try{
+          const ta = document.createElement("textarea");
+          ta.value = xml;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+          setMsg("XML a vágólapra másolva (fallback).", "ok");
+        }catch(e2){
+          setMsg("Nem sikerült a másolás. Használd a letöltést.", "warn");
+        }
+      }
+    }
+
+    function parseXmlToUseCases(xmlText){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xmlText, "application/xml");
+      const pe = doc.getElementsByTagName("parsererror");
+      if (pe && pe.length){
+        throw new Error("XML parse error");
+      }
+
+      const nodes = Array.from(doc.querySelectorAll("use_cases > use_case, use_case"));
+      if (!nodes.length){
+        throw new Error("No <use_case> elements found");
+      }
+
+      const arr = nodes.map(node => {
+        const uc = emptyUseCase();
+        FIELD_KEYS.forEach(k => {
+          const el = node.querySelector(k);
+          uc[k] = el ? (el.textContent ?? "") : "";
+        });
+        return uc;
+      });
+
+      return arr;
+    }
+
+    function importXmlFromFile(file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const text = String(reader.result ?? "");
+          const arr = parseXmlToUseCases(text);
+          useCases = arr;
+          ensureAtLeastOne();
+          activeIndex = 0;
+          dirty = true;
+
+          refreshSelect();
+          loadFormFromActive();
+          renderPreview();
+          setMsg("XML import sikeres. Ne felejts el menteni (böngészőbe) ha kell.", "ok");
+        }catch(e){
+          setMsg("Sikertelen XML import: ellenőrizd a formátumot.", "warn");
+        }
+      };
+      reader.onerror = () => setMsg("Sikertelen fájl olvasás.", "warn");
+      reader.readAsText(file, "utf-8");
+    }
+
+    // ====== Események ======
+    ucSelect.addEventListener("change", () => {
+      const idx = Number(ucSelect.value);
+      if (Number.isFinite(idx) && idx >= 0 && idx < useCases.length){
+        activeIndex = idx;
+        loadFormFromActive();
+        renderPreview();
+        setMsg("Use case kiválasztva.", "system");
+      }
+    });
+
+    btnNew.addEventListener("click", addUseCase);
+    btnDuplicate.addEventListener("click", duplicateUseCase);
+    btnDelete.addEventListener("click", deleteUseCase);
+
+    btnCopy.addEventListener("click", copyXml);
+    btnDownload.addEventListener("click", downloadXml);
+    btnSave.addEventListener("click", saveToBrowser);
+    btnLoad.addEventListener("click", loadFromBrowser);
+
+    btnImport.addEventListener("click", () => fileImport.click());
+    fileImport.addEventListener("change", () => {
+      const f = fileImport.files && fileImport.files[0];
+      if (f) importXmlFromFile(f);
+      fileImport.value = "";
+    });
+
+    // mezők: input → adatmodell frissítés
+    FIELD_KEYS.forEach(k => {
+      const el = fieldEls[k];
+      if (!el) return;
+      el.addEventListener("input", () => {
+        const uc = useCases[activeIndex];
+        if (!uc) return;
+
+        uc[k] = String(el.value ?? "");
+        markDirty();
+
+        // Ha név változik, frissítsük a listát
+        if (k === "name"){
+          refreshSelect();
+          ucSelect.value = String(activeIndex);
+        }
+
+        renderPreview();
+      });
+    });
+
+    // ====== Boot ======
+    (function boot(){
+      // próbáljuk betölteni, ha van
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw){
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.useCases) && parsed.useCases.length){
+            useCases = parsed.useCases.map(x => {
+              const uc = emptyUseCase();
+              FIELD_KEYS.forEach(k => uc[k] = String(x?.[k] ?? ""));
+              return uc;
+            });
+            activeIndex = Math.min(Math.max(0, Number(parsed.activeIndex ?? 0)), useCases.length - 1);
+            dirty = false;
+          }
+        }
+      }catch(e){
+        // ignore, majd default
+      }
+
+      ensureAtLeastOne();
+      refreshSelect();
+      loadFormFromActive();
+      renderPreview();
+      setMsg("Töltsd ki az input mezőket, majd exportáld ki XML-be.", "system");
+    })();
+  </script>
+</body>
+</html>
